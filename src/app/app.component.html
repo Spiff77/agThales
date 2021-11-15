@@ -1,9 +1,13 @@
 <h1>Hello World</h1>
 <nav>
   <ul>
-    <li [routerLink]="['/a']">A</li>
-    <li [routerLink]="['/b']">B</li>
-    <li [routerLink]="['/users']">Users</li>
+    <li [routerLink]="['/a']">{{'navA' | translate}}</li>
+    <li [routerLink]="['/b']">{{'navB' | translate}}</li>
+    <li [routerLink]="['/users']">{{'navUsers' | translate}}</li>
+    <select name="lang" id="" (change)="changeLang($event.target)">
+      <option value="FR">Français</option>
+      <option value="EN">English</option>
+    </select>
   </ul>
 </nav>
 <router-outlet></router-outlet>

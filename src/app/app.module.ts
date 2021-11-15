@@ -3,10 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserListComponent } from './user-list/user-list.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {RouterModule, Routes} from '@angular/router';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 
 const routes: Routes = [
@@ -17,6 +19,10 @@ const routes: Routes = [
 
 ]
 
+//export const httpLoaderFactory = (http: HttpClient) => new TranslateHttpLoader(http, './i18n/', '.json');
+export function HttpLoaderFactory(http: HttpClient): any {
+  return new TranslateHttpLoader(http);
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,13 +32,14 @@ const routes: Routes = [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     RouterModule.forRoot(routes),
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
   ],
   providers: [],
   bootstrap: [AppComponent]
