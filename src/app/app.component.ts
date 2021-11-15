@@ -18,10 +18,11 @@ export class AppComponent implements OnInit{
     let lang = target.value;
     localStorage.setItem('lang', lang)
     this.translationService.use(lang)
+    window.location.reload()
   }
 
   ngOnInit(): void {
-    this.translationService.setDefaultLang('FR')
+    //this.translationService.setDefaultLang('FR')
     let lang = localStorage.getItem('lang') || 'EN';
     this.translationService.use(lang)
   }

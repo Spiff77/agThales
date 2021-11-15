@@ -14,7 +14,7 @@ export class UserListComponent implements OnInit {
   constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
-    this.users = this.http.get('http://localhost:8086/learn/api/products')
+    this.users = this.http.get('https://localhost:8086/learn/api/products')
   }
 
 }

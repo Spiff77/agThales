@@ -3,12 +3,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserListComponent } from './user-list/user-list.component';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {RouterModule, Routes} from '@angular/router';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {UnsecureInterceptor} from './unsecure.interceptor';
+import {BreweryLocationInterceptor} from './brewery-location.interceptor';
+import { BreweryListComponent } from './brewery-list/brewery-list.component';
 
 
 const routes: Routes = [
@@ -16,6 +19,7 @@ const routes: Routes = [
   {path: 'a', loadChildren: () => import('./a/a.module').then(m => m.AModule)},
   {path: 'b', loadChildren: () => import('./b/b.module').then(m => m.BModule)},
   {path: 'users', component: UserListComponent},
+  {path: 'breweries', component: BreweryListComponent},
 
 ]
 
@@ -27,6 +31,7 @@ export function HttpLoaderFactory(http: HttpClient): any {
   declarations: [
     AppComponent,
     UserListComponent,
+    BreweryListComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,16 @@ export function HttpLoaderFactory(http: HttpClient): any {
     }),
     RouterModule.forRoot(routes),
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: UnsecureInterceptor,
+    multi: true
+  },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BreweryLocationInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
