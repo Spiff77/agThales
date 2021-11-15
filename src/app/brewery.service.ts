@@ -9,7 +9,7 @@ export class BreweryService {
 
   constructor(private http:HttpClient) { }
 
-  all(): Observable<any> {
-    return this.http.get('https://api.openbrewerydb.org/breweries')
+  all(): Promise<any> {
+    return this.http.get('https://api.openbrewerydb.org/breweries').toPromise()
   }
 }

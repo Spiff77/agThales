@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {interval, Observable, Subscription, timer} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {BreweryService} from '../brewery.service';
+import {delay, takeUntil, takeWhile} from 'rxjs/operators';
 
 @Component({
   selector: 'app-brewery-list',
@@ -10,10 +11,14 @@ import {BreweryService} from '../brewery.service';
 })
 export class BreweryListComponent implements OnInit {
   breweries!: Observable<any>
+  brewerieList: any[] = []
+
+  isAlive = true;
 
   constructor(private bs: BreweryService) { }
 
-  ngOnInit(): void {
-    this.breweries = this.bs.all()
+  async ngOnInit(): Promise<void> {
+    this.brewerieList = await this.bs.all()
+
   }
 }
